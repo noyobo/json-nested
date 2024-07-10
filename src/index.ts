@@ -1,24 +1,40 @@
-function parse(source: any): any {
-  if (typeof source === 'string') {
+function tryParse(source: string) {
+  if (isString(source)) {
     try {
-      return JSON.parse(source);
+      return parseNested(JSON.parse(source));
     } catch {
       return source;
     }
-  } else if (Array.isArray(source)) {
-    return source.map(parse);
-  } else if (source && typeof source === 'object') {
-    return Object.entries(source).reduce(
-      (acc, [key, value]) => {
-        acc[key] = parse(value);
-        return acc;
-      },
-      {} as {
-        [key: string]: any;
-      }
-    );
   }
   return source;
 }
 
-export { parse };
+function isObject(source: any): source is Record<string, any> {
+  return typeof source === 'object' && source !== null;
+}
+
+function isArray(source: any): source is any[] {
+  return Array.isArray(source);
+}
+
+function isString(source: any): source is string {
+  return typeof source === 'string';
+}
+
+function parseNested(source: any): any {
+  if (isArray(source)) {
+    return source.map(v => parseNested(v));
+  }
+  if (isObject(source)) {
+    const result: Record<string, any> = {};
+    for (const key in source) {
+      result[key] = parseNested(source[key]);
+    }
+    return result;
+  }
+  return tryParse(source);
+}
+
+export const parse = (source: any) => {
+  return parseNested(source);
+};
