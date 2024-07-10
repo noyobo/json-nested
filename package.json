@@ -1,17 +1,17 @@
 {
-  "name": "json-all",
-  "version": "2.1.1",
+  "name": "json-nested",
+  "version": "1.0.0",
   "description": "Parse all possible nested JSON strings.",
   "keywords": [
     "json-parse"
   ],
-  "homepage": "https://github.com/noyobo/json-all#readme",
+  "homepage": "https://github.com/noyobo/json-nested#readme",
   "bugs": {
-    "url": "https://github.com/noyobo/json-all/issues"
+    "url": "https://github.com/noyobo/json-nested/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/noyobo/json-all.git"
+    "url": "git+https://github.com/noyobo/json-nested.git"
   },
   "license": "MIT",
   "author": {
@@ -20,26 +20,35 @@
     "url": "https://github.com/noyobo"
   },
   "main": "./lib/index.js",
+  "module": "./esm/index.js",
+  "types": "./types/index.d.ts",
   "files": [
-    "lib/"
+    "lib/",
+    "esm/",
+    "types/"
   ],
   "scripts": {
-    "build": "tsc --project tsconfig.build.json",
-    "build:esm": " swc src -d esm --strip-leading-paths -C module.type=es6 -C jsc.target=es2017 -C minify=true -C jsc.minify.mangle=true",
-    "build:lib": " swc src -d lib --strip-leading-paths  -C module.type=commonjs -C minify=true -C jsc.minify.mangle=true",
+    "build": "npm run build:esm && npm run build:lib",
+    "build:esm": "swc src -d esm --strip-leading-paths -C module.type=es6 -C jsc.target=es2016",
+    "build:lib": "swc src -d lib --strip-leading-paths  -C module.type=commonjs",
     "clean": "rm -rf ./lib ./esm types",
     "lint": "eslint ./src --fix",
-    "prepare": "npx husky install"
+    "prepare": "npx husky install",
+    "test": "vitest --run",
+    "test:watch": "vitest --watch"
   },
   "lint-staged": {
-    "*.ts": "eslint --cache --cache-location .eslintcache --fix"
+    "*.ts": "prettier --write"
   },
   "dependencies": {},
   "devDependencies": {
-    "@biomejs/biome": "^1.8.3",
     "@swc/cli": "^0.4.0",
     "@swc/core": "^1.6.13",
-    "husky": "^9.0.11"
+    "@vitest/coverage-v8": "^2.0.1",
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.7",
+    "prettier": "^3.3.2",
+    "vitest": "^2.0.1"
   },
   "engines": {
     "node": ">=12.0"
