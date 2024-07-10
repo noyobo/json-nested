@@ -1,6 +1,6 @@
 {
   "name": "json-nested",
-  "version": "2.1.1",
+  "version": "1.0.0",
   "description": "Parse all possible nested JSON strings.",
   "keywords": [
     "json-parse"
@@ -21,6 +21,7 @@
   },
   "main": "./lib/index.js",
   "module": "./esm/index.js",
+  "types": "./types/index.d.ts",
   "files": [
     "lib/",
     "esm/",
@@ -28,8 +29,8 @@
   ],
   "scripts": {
     "build": "npm run build:esm && npm run build:lib",
-    "build:esm": "swc src -d esm --strip-leading-paths -C module.type=es6 -C jsc.target=es2017 -C minify=true -C jsc.minify.mangle=true",
-    "build:lib": "swc src -d lib --strip-leading-paths  -C module.type=commonjs -C minify=true -C jsc.minify.mangle=true",
+    "build:esm": "swc src -d esm --strip-leading-paths -C module.type=es6 -C jsc.target=es2016",
+    "build:lib": "swc src -d lib --strip-leading-paths  -C module.type=commonjs",
     "clean": "rm -rf ./lib ./esm types",
     "lint": "eslint ./src --fix",
     "prepare": "npx husky install",
